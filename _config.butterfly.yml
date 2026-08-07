@@ -66,13 +66,13 @@ disable_top_img: false
 default_top_img: /img/cover.png
 
 # The banner image of index page
-index_img: /img/cover.png
+index_img: https://t.alcy.cc/ycy
 
 # The banner image of archive page
-archive_img: /img/cover.png
+archive_img: https://t.alcy.cc/ycy
 
 # Note: tag page, not tags page
-tag_img: /img/cover.png
+tag_img: https://t.alcy.cc/ycy
 
 # The banner image of tag page, you can set the banner image for each tag
 # Format:
@@ -80,7 +80,7 @@ tag_img: /img/cover.png
 tag_per_img:
 
 # Note: category page, not categories page
-category_img: /img/cover.png
+category_img: https://t.alcy.cc/ycy
 
 # The banner image of category page, you can set the banner image for each category
 # Format:
@@ -88,7 +88,7 @@ category_img: /img/cover.png
 category_per_img:
 
 # The background image of footer
-footer_img: false
+footer_img: https://t.alcy.cc/ycy
 
 # Website Background
 # Can set it to color, image URL or an array containing colors and/or image URLs
