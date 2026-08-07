@@ -21,11 +21,11 @@ pnpm exec hexo new "文章标题"
 
 ## 发布到 GitHub Pages
 
-1. 在 GitHub 创建仓库 `<你的用户名>.github.io`
+1. 在 GitHub 创建仓库 `<你的用户名>.github.io`（本项目对应 `realmorro369-arch.github.io`）
 2. 把本目录推送上去：
 
 ```bash
-git remote add origin https://github.com/<你的用户名>/<你的用户名>.github.io.git
+git remote add origin git@github.com:realmorro369-arch/realmorro369-arch.github.io.git
 git branch -M main
 git push -u origin main
 ```

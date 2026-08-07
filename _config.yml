@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 我的博客
+title: MorroBlog
 subtitle: 记录技术，分享生活
 description: 个人技术博客，记录学习与生活
 keywords: [hexo, butterfly, blog, 博客]
@@ -13,7 +13,7 @@ timezone: Asia/Shanghai
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://your-name.github.io/
+url: https://realmorro369-arch.github.io/
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
