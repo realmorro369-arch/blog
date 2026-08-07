@@ -1,0 +1,7 @@
+- class_name: 友情链接
+  class_desc: 一些值得逛逛的博客
+  link_list:
+    - name: UncleC's blog
+      link: https://unclecheng-li.github.io/
+      avatar: https://avatars.githubusercontent.com/u/55303635?s=200
+      descr: 网络工程师的学习笔记
