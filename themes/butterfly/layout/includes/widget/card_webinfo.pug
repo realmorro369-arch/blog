@@ -42,3 +42,16 @@ if theme.aside.card_webinfo.enable
           .item-name= `${_p('aside.card_webinfo.last_push_date.name')} :`
           .item-count#last-push-date(data-lastPushDate=date_xml(Date.now()))
             i.fa-solid.fa-spinner.fa-spin
+      .webinfo-item
+        .item-name 本站点开合次数：
+        .item-count#site-open-count 0
+  script.
+    (function () {
+      try {
+        var key = 'morro_blog_open_count';
+        var n = parseInt(localStorage.getItem(key) || '0', 10) + 1;
+        localStorage.setItem(key, n);
+        var el = document.getElementById('site-open-count');
+        if (el) el.textContent = n;
+      } catch (e) {}
+    })();
