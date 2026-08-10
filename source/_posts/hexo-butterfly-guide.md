@@ -4,7 +4,7 @@ date: 2026-08-07 12:30:00
 tags:
   - 教程
   - Hexo
-cover: https://tc.alcy.cc/tc/20260429/0bb4d26f7dc33cfbd48fe7b74b42e21b.webp
+cover: https://tc.alcy.cc/tc/20260429/ab90936a7244b4c3f402d0565f5c0bbb.webp
 ---
 
 这篇文章是一份搭建记录，照着做你也能拥有一个同款博客。
