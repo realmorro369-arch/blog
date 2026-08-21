@@ -36,6 +36,12 @@ jobs:
       - name: Build site
         run: pnpm exec hexo generate
 
+      - name: Check Front Matter and default resources
+        run: node tools/quality-check.cjs source/_posts _config.butterfly.yml
+
+      - name: Check generated site resources
+        run: node tools/check-public-resources.cjs public
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
