@@ -10,3 +10,7 @@ _multiconfig.yml
 # downloaded theme archive
 butterfly.zip
 
+# desktop editor local build outputs
+desktop-editor/release/
+desktop-editor/verify-asar/
+

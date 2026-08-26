@@ -1,0 +1,48 @@
+{
+  "name": "morroblog-editor-desktop",
+  "version": "1.1.2",
+  "description": "正文校样室的离线桌面封装",
+  "private": true,
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist:win": "electron-builder --win portable --publish never"
+  },
+  "devDependencies": {
+    "electron": "43.4.1",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "asia.morro.blog.editor",
+    "productName": "正文校样室",
+    "artifactName": "BlogEditor-v${version}-windows-${arch}-portable.${ext}",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "desktop/**",
+      "dist/**",
+      "package.json",
+      "!dist/public/__manus__/**"
+    ],
+    "asar": true,
+    "compression": "maximum",
+    "electronLanguages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "portable": {
+      "requestExecutionLevel": "user"
+    }
+  }
+}

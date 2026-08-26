@@ -1,0 +1,47 @@
+name: Release Windows Editor
+
+on:
+  push:
+    tags:
+      - "editor-v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Build Windows portable EXE
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop-editor/package-lock.json
+
+      - name: Install desktop dependencies
+        working-directory: desktop-editor
+        run: npm ci
+
+      - name: Build portable EXE
+        working-directory: desktop-editor
+        run: npm run dist:win
+
+      - name: Publish release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          name: 正文校样室 ${{ github.ref_name }}
+          body: |
+            ## Windows 修复版
+
+            - 修复桌面版离线加载时资源路径错误导致的白屏。
+            - 移除不必要的远程分析与调试资源。
+            - 仅保留简体中文和英文 Chromium 语言包，并使用最高压缩等级减小便携 EXE 体积。
+          files: desktop-editor/release/*.exe
