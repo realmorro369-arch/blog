@@ -100,25 +100,56 @@ func installPayload(baseDirectory, runtimeDirectory string) error {
 }
 
 func downloadPayload(destination string) error {
-	client := &http.Client{Timeout: 12 * time.Minute}
+	attempts := []struct {
+		name   string
+		client *http.Client
+	}{
+		{
+			name: "直连",
+			client: &http.Client{
+				Timeout: 12 * time.Minute,
+				Transport: &http.Transport{
+					Proxy: nil,
+				},
+			},
+		},
+		{
+			name:   "系统代理",
+			client: &http.Client{Timeout: 12 * time.Minute},
+		},
+	}
+
+	var failures []string
+	for _, attempt := range attempts {
+		if err := downloadWithClient(attempt.client, destination); err == nil {
+			return nil
+		} else {
+			failures = append(failures, attempt.name+"："+err.Error())
+			_ = os.Remove(destination)
+		}
+	}
+	return fmt.Errorf("无法下载运行文件。已依次尝试直连和系统代理：%s", strings.Join(failures, "；"))
+}
+
+func downloadWithClient(client *http.Client, destination string) error {
 	response, err := client.Get(payloadURL)
 	if err != nil {
-		return fmt.Errorf("无法下载运行文件：%w", err)
+		return err
 	}
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		return fmt.Errorf("下载运行文件失败：服务器返回 %s", response.Status)
+		return fmt.Errorf("服务器返回 %s", response.Status)
 	}
 
 	file, err := os.Create(destination)
 	if err != nil {
-		return fmt.Errorf("无法保存下载文件：%w", err)
+		return err
 	}
 	defer file.Close()
 
 	if _, err := io.Copy(file, response.Body); err != nil {
-		return fmt.Errorf("下载运行文件中断：%w", err)
+		return err
 	}
 	return nil
 }
