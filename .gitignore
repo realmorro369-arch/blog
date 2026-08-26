@@ -14,3 +14,11 @@ butterfly.zip
 desktop-editor/release/
 desktop-editor/verify-asar/
 
+# Azure bootstrapper local build outputs
+azure-launcher/build/
+azure-launcher/release/
+azure-payload/node_modules/
+azure-payload/release/
+azure-payload/verify-asar/
+azure-payload/smoke-test.cjs
+

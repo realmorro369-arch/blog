@@ -1,0 +1,35 @@
+{
+  "name": "morroblog-azure-payload",
+  "version": "1.1.3",
+  "description": "正文校样室蔚蓝版运行载荷",
+  "private": true,
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "dist:win:dir": "electron-builder --win --dir --publish never"
+  },
+  "devDependencies": {
+    "electron": "43.4.1",
+    "electron-builder": "26.0.12"
+  },
+  "build": {
+    "appId": "asia.morro.blog.editor",
+    "productName": "正文校样室",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "desktop/**",
+      "dist/**",
+      "package.json"
+    ],
+    "asar": true,
+    "compression": "maximum",
+    "electronLanguages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "win": {
+      "target": "dir"
+    }
+  }
+}

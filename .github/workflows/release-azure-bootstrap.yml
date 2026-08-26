@@ -1,0 +1,78 @@
+name: Release Azure Bootstrapper
+
+on:
+  push:
+    tags:
+      - "azure-v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release-windows:
+    name: Build Azure Bootstrapper and Runtime Payload
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: azure-payload/package-lock.json
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+
+      - name: Install runtime payload dependencies
+        working-directory: azure-payload
+        run: npm ci
+
+      - name: Build original-interface runtime payload
+        working-directory: azure-payload
+        run: npm run dist:win:dir
+
+      - name: Archive payload and calculate checksum
+        id: payload
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $asset = "BlogEditor-$tag-windows-x64-runtime.tar.gz"
+          $path = "azure-payload/release/$asset"
+          tar -C "azure-payload/release/win-unpacked" -czf $path .
+          $hash = (Get-FileHash -Path $path -Algorithm SHA256).Hash.ToLower()
+          "asset=$asset" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "sha256=$hash" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Build lightweight Azure launcher
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}"
+          $payloadUrl = "https://github.com/${{ github.repository }}/releases/download/$tag/${{ steps.payload.outputs.asset }}"
+          $payloadSha256 = "${{ steps.payload.outputs.sha256 }}"
+          New-Item -ItemType Directory -Force -Path "azure-launcher/release" | Out-Null
+          $launcher = "azure-launcher/release/BlogEditor-$tag-windows-x64-azure-bootstrapper.exe"
+          go build -trimpath -ldflags "-s -w -H=windowsgui -X main.payloadURL=$payloadUrl -X main.payloadSHA256=$payloadSha256" -o $launcher azure-launcher/main.go
+
+      - name: Publish Azure release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          name: 正文校样室 蔚蓝版 ${{ github.ref_name }}
+          body: |
+            ## 蔚蓝版
+
+            此版本的启动 EXE 只包含首启引导逻辑。首次运行会在 EXE 同级创建“正文校样室-运行文件”文件夹，下载并校验运行载荷后自动启动正文校样室；后续启动不再重复下载。
+
+            - 页面内容、界面外貌和图标资源保持与原始发布版一致。
+            - 启动器会验证 SHA-256；校验不通过的下载文件不会被解压或运行。
+            - 如需重新下载运行载荷，删除“正文校样室-运行文件”文件夹后重新启动 EXE。
+          files: |
+            azure-launcher/release/*.exe
+            azure-payload/release/*.zip
