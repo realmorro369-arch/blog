@@ -1,0 +1,48 @@
+name: Release Standalone Editor
+
+on:
+  push:
+    tags:
+      - "standalone-v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    name: Build standalone Windows EXE
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: azure-payload/package-lock.json
+
+      - name: Install dependencies
+        working-directory: azure-payload
+        run: npm ci
+
+      - name: Build standalone portable EXE
+        working-directory: azure-payload
+        run: npm run dist:win:portable
+
+      - name: Publish standalone release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          name: 正文校样室一体式 ${{ github.ref_name }}
+          body: |
+            ## 一体式 Windows 版
+
+            - 单个 EXE，双击直接运行。
+            - 不进行首次下载，不创建运行载荷文件夹，不受网络或代理设置影响。
+            - 页面内容、界面外貌和图标资源保持与首次修复前的原始发布版一致。
+            - 修复本地资源加载路径导致的启动失败和白屏问题。
+          files: azure-payload/release/*.exe
