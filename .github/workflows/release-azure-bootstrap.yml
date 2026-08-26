@@ -75,4 +75,4 @@ jobs:
             - 如需重新下载运行载荷，删除“正文校样室-运行文件”文件夹后重新启动 EXE。
           files: |
             azure-launcher/release/*.exe
-            azure-payload/release/*.zip
+            azure-payload/release/*.tar.gz
